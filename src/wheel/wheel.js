@@ -18,8 +18,6 @@
 			return;
 		}
 
-		e.preventDefault();
-
 		var wheelDeltaX, wheelDeltaY,
 			newX, newY,
 			that = this;
@@ -104,6 +102,20 @@
 		}
 
 		this.scrollTo(newX, newY, 0);
+
+        if(wheelDeltaY < 0){
+            if(this.maxScrollY !== this.y){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+        else if(wheelDeltaY > 0){
+
+            if(this.y !== 0){
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
 
 // INSERT POINT: _wheel
 	},
