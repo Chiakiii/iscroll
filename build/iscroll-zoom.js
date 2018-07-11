@@ -1,4 +1,4 @@
-/*! iScroll v5.2.1 ~ (c) 2008-2018 Matteo Spinelli ~ http://cubiq.org/license */
+/*! iScroll v5.2.5 ~ (c) 2008-2018 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
 var rAF = window.requestAnimationFrame	||
 	window.webkitRequestAnimationFrame	||
@@ -350,7 +350,8 @@ function IScroll (el, options) {
 		HWCompositing: true,
 		useTransition: true,
 		useTransform: true,
-		bindToWrapper: typeof window.onmousedown === "undefined"
+		bindToWrapper: typeof window.onmousedown === "undefined",
+		preventDefaultWheel: false
 	};
 
 	for ( var i in options ) {
@@ -416,7 +417,7 @@ function IScroll (el, options) {
 }
 
 IScroll.prototype = {
-	version: '5.2.1',
+	version: '5.2.5',
 
 	_init: function () {
 		this._initEvents();
@@ -1415,19 +1416,24 @@ IScroll.prototype = {
 
 		this.scrollTo(newX, newY, 0);
 
-        if(wheelDeltaY < 0){
-            if(this.maxScrollY !== this.y){
-                e.preventDefault();
-                e.stopPropagation();
+		if (!this.options.preventDefaultWheel) {
+            if(wheelDeltaY < 0){
+                if(this.maxScrollY !== this.y){
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             }
-        }
-        else if(wheelDeltaY > 0){
+            else if(wheelDeltaY > 0){
 
-            if(this.y !== 0){
-                e.preventDefault();
-                e.stopPropagation();
+                if(this.y !== 0){
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
             }
-        }
+		} else {
+            e.preventDefault();
+            e.stopPropagation();
+		}
 
 // INSERT POINT: _wheel
 	},
